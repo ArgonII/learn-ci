@@ -1,20 +1,29 @@
-name: Learn
+name: Production Pipeline
 
-on: push
+on: 
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
 
-jobs: 
-  test:
-    runs-on: ${{matrix.os}}
-    strategy:
-      matrix: 
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        nodes: [18, 20, 21]
+    jobs:
+      test:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Сканування коду репозиторію
+            uses: action/checkout@v4
+          
+          - name: Налаштування Node.js
+            uses: action/setup-node@v4
+            with:
+              node-version: '20'
+              cache: 'npm'
 
-    steps:
-      - uses: actions/checkout@v4 
-      - uses: actions/setup-node@v4 
-        with: 
-          node-version: ${{matrix.nodes}}
+          - name: Встановлення залежностей
+            run: npm ci
 
-      - run: node -v
-      - run: npm -v      
+          - name: tests
+            run: npm test 
+
+          - name: Linting
+            run: npm rum lint
