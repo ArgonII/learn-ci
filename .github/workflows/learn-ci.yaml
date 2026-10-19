@@ -4,6 +4,17 @@ on: push
 
 jobs: 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
+    strateegy:
+      matrix: 
+      os: [ubuntu, windows, macos]
+      nodes: [18, 20, 21]
+
     steps:
-      - run: echo "Hello World"  
+      - uses: actions/checkout@v4 
+      - uses: actions/setup-node@v4 
+        with: 
+          node-version: ${{matrix.nodes}}
+
+      - run: npm ci
+      - run: npm test      
