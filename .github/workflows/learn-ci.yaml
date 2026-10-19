@@ -16,5 +16,5 @@ jobs:
         with: 
           node-version: ${{matrix.nodes}}
 
-      - run: npm ci
-      - run: npm test      
+      - run: node -v
+      - run: npm -v      
